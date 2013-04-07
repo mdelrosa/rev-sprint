@@ -8,12 +8,9 @@ exports.list = function(req, res){
 };
 
 exports.main = function(req, res){
-	if (req.session.user)
-		res.render('main')
-	else
-		res.redirect('/login')
+  res.render('index', {title: 'Taskmaster'})
 }
 
 exports.login = function(req, res){
-	res.render('login', {title: 'Taskmaster'})
+  res.render('login', {title: 'Taskmaster'})
 }
