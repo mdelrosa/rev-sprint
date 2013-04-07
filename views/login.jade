@@ -1,0 +1,8 @@
+extends layout
+
+block content
+  div.center.well
+    form(mame='login', action='/login/action', method='post')
+      input(type='text', placeholder="Username", name='username')
+      input(type='text', placeholder="Password", name='password')
+      input.btn.btn-success Login
