@@ -3,7 +3,7 @@ console.log('magnify.js loaded');
 chrome.tabs.onUpdated.addListener(function() {
   chrome.tabs.getSelected(null,function(tab) {
     var tablink = tab.url;
-    var badlink = 'facebook'
+    var badlink = 'twitter'
     console.log(tablink.indexOf(badlink))
     if (tablink.indexOf(badlink) > -1) {
       console.log('badlink')
