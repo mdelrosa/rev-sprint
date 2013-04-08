@@ -1,0 +1,12 @@
+h2.centered Tasks
+
+if (tasks == false || tasks.length() == 0)
+  h4 What do you want to get done?
+    form
+      p	
+        input(placeholder="Task name?", name='taskname')
+      p
+        input(placeholder="Duration?", name='duration')
+else
+   for task in tasks
+      div #{task.name}

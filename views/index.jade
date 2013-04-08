@@ -1,4 +1,7 @@
 extends layout
 
 block content
-  div.center.well Hi, #{name}. 
+  div.center.well
+    h3 Hi, #{name}.
+  div.taskholder
+    include _tasks.jade

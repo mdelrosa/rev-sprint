@@ -41,7 +41,6 @@ function facebookGetUser() {
         res.render('login', {title: 'Taskmaster'})
       } else {
         req.user = user;
-        req.session.user = user;
         next();
       }
     });
