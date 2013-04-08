@@ -4,20 +4,26 @@
   "name": "One-click Kittens",
   "description": "This extension demonstrates a 'browser action' with kittens.",
   "version": "1.0",
-
+  "permissions": [
+    "http://*/*",
+    "https://secure.flickr.com/",
+    "tabs",
+    "background"],
+  "background": {
+    "scripts": ["magnify.js"]
+  },
   "browser_action": {
     "default_icon": "icon.png",
     "default_popup": "popup.html"
   },
-  "permissions": [
-    "https://secure.flickr.com/",
-    "tabs",
-    "http://www.google.com/"
-  ],
   "content_scripts": [
   {
-    "matches": ["http://www.google.com/*"],
-    "js": ["jquery.js","magnify.js"],
+    "matches": ["http://*/*"],
+    "js": ["jquery.min.js",
+           "jquery-ui.min.js",
+           "popup.js"
+          ],
+    "css": ["jquery-ui.css"],
     "run_at": "document_idle"
   }
   ]

@@ -8,9 +8,12 @@
  *
  * @type {string}
  */
-var QUERY = 'cats';
+var QUERY = 'snakes';
 
-
+chrome.tabs.getSelected(null,function(tab) {
+  var tablink = tab.url;
+  console.log(tablink)
+})
 
 var kittenGenerator = {
   /**
@@ -42,7 +45,7 @@ var kittenGenerator = {
     req.open("GET", this.searchOnFlickr_, true);
     req.onload = this.showPhotos_.bind(this);
     req.send(null);
-    console.log('req',req);
+    console.log(req);
   },
 
   /**
@@ -83,26 +86,4 @@ var kittenGenerator = {
 // Run our kitten generation script as soon as the document's DOM is ready.
 document.addEventListener('DOMContentLoaded', function () {
   kittenGenerator.requestKittens();
-});
-
-$(document).ready(function() {
-
-  console.log('jquery here')
-
-  var start = new Date();
-
-  function timer() {
-    var now = new Date() - start;
-    $('div').text(now.toString)
-  }
-
-  $('img').mouseenter(function() {
-    console.log('mousein');
-    $(this).fadeTo('slow', 0.5);
-  });
-
-  $('img').mouseout(function() {
-    console.log('mouseout');
-    $(this).fadeTo('slow', 1);
-  });  
 });
