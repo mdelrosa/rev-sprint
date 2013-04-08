@@ -8,7 +8,18 @@ exports.list = function(req, res){
 };
 
 exports.main = function(req, res){
-  res.render('index', {title: 'Taskmaster'})
+  req.facebook.api('/me', function(err, user) {
+    name = user.name;
+    res.render('index', {title: 'Taskmaster', name: name})
+  });
+}
+
+exports.current = function(req, res){
+  res.render('current', {title: 'Current Tasks'})
+}
+
+exports.history = function(req, res){
+  res.render('history', {title: 'Task History'})
 }
 
 exports.login = function(req, res){

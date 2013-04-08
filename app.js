@@ -49,6 +49,9 @@ function facebookGetUser() {
 }
 
 app.get('/', facebookGetUser(), user.main);
+app.get('/current', facebookGetUser(), user.current);
+app.get('/history', facebookGetUser(), user.history);
+
 app.get('/login', Facebook.loginRequired(), function(req, res){
   res.redirect('/');
 });
