@@ -1,12 +1,6 @@
-h2.centered Tasks
-
-if (tasks == false || tasks.length() == 0)
-  h4 What do you want to get done?
-    form
-      p	
-        input(placeholder="Task name?", name='taskname')
-      p
-        input(placeholder="Duration?", name='duration')
+h3 Task History:
+if (tasks == true || tasks.length != 0)
+  for task in tasks
+    div #{task.name}
 else
-   for task in tasks
-      div #{task.name}
+  p Nothing here yet. What would you like to do?

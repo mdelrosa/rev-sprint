@@ -1,7 +1,34 @@
 extends layout
+block scripts
+  script(type='text/javascript')
+    $(document).ready(function() {
+      $('#Submit').click(function (){
+        console.log("Has been clicked");
+        var taskName = $('#taskname').val();
+        var duration = $('#duration').val();
+        console.log("Got information.");
+        $('#duration').val("");
+        $('#taskname').val("");
+        $('#keywords').val("");
+        $.post('./newtask', { taskName : taskName, duration : duration}, function(data){
+          console.log("Is this working yet?");
+        });
+      });
+    });
 
 block content
   div.center.well
     h3 Hi, #{name}.
-  div.taskholder
+    h4 What do you want to get done?
+    p
+    form(id='newtaskform')
+      p
+        input(placeholder="Task name?", id='taskname')
+      p
+        input(placeholder="Duration? (In minutes)", id='duration')
+      p
+        input(placeholder="Keywords? (Separate with ,)", id='keywords')
+      p
+      input(type='button', value='Go!', id='Submit')
+  div.taskholder.center.well
     include _tasks.jade

@@ -12,16 +12,18 @@ var userSchema = mongoose.Schema({
 })
 
 var taskSchema = mongoose.Schema({
-	creator: String,
-	date: String,
+	creator: Number,
+  name: String,
+	date: Number,
 	duration: Number,
-    keywords: Array,
-    score: Number,
-    comment: String
+  keywords: Array,
+  score: Number,
+  comment: String,
+  status: String
 })
 
 var User = mongoose.model('User', userSchema);
-var Task = mongoose.model ('Task', userSchema);
+var Task = mongoose.model ('Task', taskSchema);
 
 exports.User = User;
 exports.Task = Task;
