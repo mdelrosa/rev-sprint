@@ -6,19 +6,6 @@
 var Models = require('../models.js'),
     User = Models.User;
 
-exports.list = function(req, res){
-  res.send("respond with a resource");
-};
-
-exports.main = function(req, res) {
-	console.log('session', req.session.user);
-	res.render('index', {
-		title: 'Taskmaster',
-		name: req.session.user.username,
-		tasks: req.session.user.tasks
-	});
-}
-
 exports.main = function(req, res){
   req.facebook.api('/me', function(err, user) {
   	if (err) {console.log(err)}
