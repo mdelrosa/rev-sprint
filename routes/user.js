@@ -72,9 +72,52 @@ exports.newtask = function(req, res){
   console.log("Facebook ID: ", req.session.gerbil);
   var dat = new Date();
   var now = dat.getTime();
-  var task = new Task({ creator: req.session.gerbil, name: req.body.taskName, date: now, duration: parseInt(req.body.duration) * 60000, score: 0, comment: "", keywords: []});
-  task.save(function (err) {
-    if (err)
+  var durMS = parseInt(req.body.duration) * 60000;
+  var task = new Task({ creator: req.session.gerbil, name: req.body.taskName, date: now,
+    duration: durMS, score: [], scoretime: [] comment: "", keywords: [], status: "open"});
+  task.score[0] = 0;
+  task.scoretime[0] = 0;
+  task.save(function (err, task) {
+    if(err) {
       console.log("Error saving new task");
+    }
+    finishTask(task.date, task.creator);
   });
+}
+
+exports.checkTask = function(req,res) {
+  console.log("Checking for open task...");
+  Task.findOne({creator: req.body.creator, status: "open"}), function(err,doc) {
+    if(err){
+      console.log("Error finding open task.");
+    }
+    if(doc){
+      var newscore = doc.score + req.body.scorechange;
+      var scorelength = doc.score.length;
+      doc.score.set(scorelength+1,newscore);
+
+      var timeElapsed = req.body.time - doc.date;
+      doc.scoretime.set(scorelength+1],timeElapsed);
+      if(timeElapsed >= doc.duration){
+        doc.status = "Complete";
+        console.log("Task complete.");
+      }
+      
+      doc.save(function (err) {
+        if(err){
+          console.log("Error updating task status.");
+        }
+        else{
+          console.log("Successfully completed task.");
+        }
+      });
+      
+      if(timeElapsed < doc.duration){
+        res.send(timeLeft);
+      }
+      if(timeElapsed >= doc.duration){
+        res.send("Task complete.");
+      }
+    }
+  }
 }

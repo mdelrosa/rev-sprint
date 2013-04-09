@@ -17,7 +17,8 @@ var taskSchema = mongoose.Schema({
 	date: Number,
 	duration: Number,
   keywords: Array,
-  score: Number,
+  score: Array,
+  scoretime: Array,
   comment: String,
   status: String
 })
