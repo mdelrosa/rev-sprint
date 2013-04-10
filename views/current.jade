@@ -1,5 +1,16 @@
 extends layout
-
+block scripts
+  $(document).ready(function() {
+    $('#submit').click(function (){
+      console.log("Button clicked...")
+      console.log("Abort! Abort!")
+      $.post('/abandon', { id: req.session.gerbil } function() {window.location.replace("/");});
+    });
+  });
 block content
   div.center.well
-    h2 You are currently working on:
+    h2 You are currently working on: #{opentask.name}.
+    p You started at #{start}.
+    p You have #{opentask.score[opentask.score.length-1]}. (Refresh to update.)
+    p Would you like to stop?
+    input(type='button', value='Abandon Current Task', id='Submit')

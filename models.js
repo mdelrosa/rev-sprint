@@ -8,7 +8,7 @@ mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/recall');
 var userSchema = mongoose.Schema({
     username: String,
     owned_tasks: Array,
-    user_id: String
+    user_id: Number
 })
 
 var taskSchema = mongoose.Schema({
