@@ -21,12 +21,18 @@ exports.main = function(req, res){
         console.log('found user', foundUser)
 				req.session.user = foundUser;
 				console.log('session', req.session.user)
-				res.render('index', {
-					title: 'Taskmaster',
-					name: req.session.user.username,
-					tasks: req.session.user.owned_tasks,
-          currentTask: req.session.user.current_task
-				});
+        Task.find({creator: req.session.gerbil, status: "complete"},function(err,doc){
+          if(err){
+            console.log(err);
+          }
+          else{
+            res.render('index', {
+              title: 'Taskmaster',
+              name: req.session.user.username,
+              tasks: doc
+            });
+          }
+        });
 			}
 			// user did not exist in db; create new one
 			else if (!foundUser || !foundUser.length) {
@@ -42,6 +48,7 @@ exports.main = function(req, res){
 						console.log("New User: ", req.session.user.username);
 						console.log("User saved");
             console.log(req.user);
+<<<<<<< HEAD
 						res.render('index', {
 							title: 'Taskmaster',
 							name: req.session.user.username,
@@ -49,6 +56,20 @@ exports.main = function(req, res){
 							tasks: req.session.user.owned_tasks,
               currentTask: req.session.user.current_task
 						});
+=======
+            Task.find({creator: req.session.gerbil, status: "complete"},function(err,doc){
+              if(err){
+                console.log(err);
+              }
+              else{
+                res.render('index', {
+                  title: 'Taskmaster',
+                  name: req.session.user.username,
+                  tasks: doc
+                });
+              }
+            });
+>>>>>>> 81de8590d8aca3f45d5d569332f48f114baa694c
 					}
 				});
 			}
@@ -58,15 +79,38 @@ exports.main = function(req, res){
 }
 
 exports.current = function(req, res){
+<<<<<<< HEAD
   console.log('here', req.session.user.current_task)
   res.render('current', {
     title: 'Current Tasks',
     currentTask: req.session.user.current_task
   });
+=======
+  Task.findOne({creator: req.session.gerbil, status: "open"}), function(err,doc) {
+    if(err)
+      console.log(err)
+    if(doc){
+      console.log(creator);
+      console.log(doc);
+      res.render('current', {title: 'Current Tasks', opentask: doc})
+    }
+  };
+>>>>>>> 81de8590d8aca3f45d5d569332f48f114baa694c
 }
 
 exports.history = function(req, res){
-  res.render('history', {title: 'Task History'})
+  Task.find({creator: req.session.gerbil, status: "complete"},function(err,doc){
+    if(err){
+      console.log(err);
+    }
+    else{
+      var dat = new Date(doc.date);
+      var readable = dat.toDateString();
+      console.log(dat);
+      res.render('history', {title: 'Task History', history: doc, start: readable})
+    }
+  });
+  
 }
 
 exports.login = function(req, res){
@@ -89,7 +133,6 @@ exports.newtask = function(req, res){
     if(err) {
       console.log("Error saving new task");
     }
-    finishTask(task.date, task.creator);
   });
 }
 
@@ -111,7 +154,7 @@ exports.checkTask = function(req,res) {
       var timeElapsed = req.body.time - doc.date;
       doc.scoretime.set(scorelength+1,timeElapsed);
       if(timeElapsed >= doc.duration){
-        doc.status = "Complete";
+        doc.status = "complete";
         console.log("Task complete.");
       }
       
@@ -120,7 +163,7 @@ exports.checkTask = function(req,res) {
           console.log("Error updating task status.");
         }
         else{
-          console.log("Successfully completed task.");
+          console.log("Successfully updated task.");
         }
       });
       
@@ -132,4 +175,13 @@ exports.checkTask = function(req,res) {
       }
     }
   }
+}
+
+exports.abandon = function(req,res) {
+  Task.remove({creator: req.body.id, status: "open"}).exec(function (err, task) {
+    if (err)
+      console.log(err)
+    else
+      res.send("Task abandoned.");
+  });
 }

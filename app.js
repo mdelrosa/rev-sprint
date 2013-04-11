@@ -56,9 +56,11 @@ app.get('/', facebookGetUser(), user.main);
 app.get('/current', facebookGetUser(), user.current);
 app.get('/history', facebookGetUser(), user.history);
 app.post('/newtask', user.newtask);
+app.post('/abandon', user.abandon);
 app.get('/login', Facebook.loginRequired(), function(req, res){
   res.redirect('/');
 });
+app.get('/check', user.checkTask);
 app.get('/logout', facebookGetUser(), function(req, res){
   req.user = null;
   req.session.destroy();
