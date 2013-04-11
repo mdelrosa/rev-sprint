@@ -8,7 +8,8 @@ mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/recall');
 var userSchema = mongoose.Schema({
     username: String,
     owned_tasks: Array,
-    user_id: String
+    user_id: String,
+    current_task: Object
 })
 
 var taskSchema = mongoose.Schema({
@@ -21,11 +22,10 @@ var taskSchema = mongoose.Schema({
   scoretime: Array,
   comment: String,
   status: String
-})
+});
 
 var User = mongoose.model('User', userSchema);
 var Task = mongoose.model ('Task', taskSchema);
 
 exports.User = User;
 exports.Task = Task;
-

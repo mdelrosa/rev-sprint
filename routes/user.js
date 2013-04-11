@@ -24,14 +24,16 @@ exports.main = function(req, res){
 				res.render('index', {
 					title: 'Taskmaster',
 					name: req.session.user.username,
-					tasks: req.session.user.owned_tasks
+					tasks: req.session.user.owned_tasks,
+          currentTask: req.session.user.current_task
 				});
 			}
 			// user did not exist in db; create new one
 			else if (!foundUser || !foundUser.length) {
 				var new_user = new User({user_id: user.id,
 					                     username: user.first_name,
-					                     owned_tasks: []
+					                     owned_tasks: [],
+                               current_task: {}
 					                 });
 				new_user.save(function(err) {
 					if(err) {console.log(err)}
@@ -44,7 +46,8 @@ exports.main = function(req, res){
 							title: 'Taskmaster',
 							name: req.session.user.username,
               ID: req.user,
-							tasks: req.session.user.owned_tasks
+							tasks: req.session.user.owned_tasks,
+              currentTask: req.session.user.current_task
 						});
 					}
 				});
@@ -55,7 +58,11 @@ exports.main = function(req, res){
 }
 
 exports.current = function(req, res){
-  res.render('current', {title: 'Current Tasks'})
+  console.log('here', req.session.user.current_task)
+  res.render('current', {
+    title: 'Current Tasks',
+    currentTask: req.session.user.current_task
+  });
 }
 
 exports.history = function(req, res){
@@ -69,12 +76,13 @@ exports.login = function(req, res){
 exports.newtask = function(req, res){
   console.log("task name: ", req.body.taskName);
   console.log("duration (ms): ", req.body.duration);
+  console.log("keywords", req.body.keywords);
   console.log("Facebook ID: ", req.session.gerbil);
   var dat = new Date();
   var now = dat.getTime();
   var durMS = parseInt(req.body.duration) * 60000;
   var task = new Task({ creator: req.session.gerbil, name: req.body.taskName, date: now,
-    duration: durMS, score: [], scoretime: [] comment: "", keywords: [], status: "open"});
+    duration: durMS, score: [], scoretime: [], comment: "", keywords: [], status: "open"});
   task.score[0] = 0;
   task.scoretime[0] = 0;
   task.save(function (err, task) {
@@ -83,6 +91,10 @@ exports.newtask = function(req, res){
     }
     finishTask(task.date, task.creator);
   });
+}
+
+exports.current_ext = function(req,res) {
+  res.send(true);
 }
 
 exports.checkTask = function(req,res) {
@@ -97,7 +109,7 @@ exports.checkTask = function(req,res) {
       doc.score.set(scorelength+1,newscore);
 
       var timeElapsed = req.body.time - doc.date;
-      doc.scoretime.set(scorelength+1],timeElapsed);
+      doc.scoretime.set(scorelength+1,timeElapsed);
       if(timeElapsed >= doc.duration){
         doc.status = "Complete";
         console.log("Task complete.");

@@ -37,13 +37,36 @@ $(document).ready(function() {
     chrome.tabs.create({'url': 'https://www.facebook.com/dialog/oauth?client_id=182707635213483&response_type=token&redirect_uri=http://www.facebook.com/connect/login_success.html'})
   })
 
-  if (!localStorage) {
-    $('.container').append("<button class='btn btn-success login'>Log in</button>");
-  }
+//supposed to close login tab after successful login.... needs work
+  // chrome.tabs.onCreated.addListener(function(tab) {
+  //   console.log('tab', tab)
+  //   chrome.tabs.onUpdated.addListener(function(tabID) {
+  //     console.log('tabID', tabID)
+  //     chrome.tabs.get(tabID, function(tab) {
+  //       if (tab.url.indexOf('www.facebook.com/connect/login_success.html') > -1) {
+  //         chrome.tabs.get()
+  //         console.log('remove')
+  //         chrome.tabs.remove(tab.id)
+  //       }
+  //     })
+  //   });
+  // });
 
+  // grabs facebook id from cookies
   chrome.cookies.get({'url': 'https://www.facebook.com/connect/login_success.html#_=_', 'name':'c_user'}, function(cookie) {
     console.log(cookie.value);
-    $('.container').append(cookie.value);
+    if (!cookie.value) {
+      //get stuff from server
+    }
+    else {
+      $('.login').remove();
+      $.get('http://localhost:3000/current/ext', {check: true}).done(function(res) {
+        console.log(res);
+        if (res===true) {
+          $('.container').append('YAY');
+        }
+      });
+    }
   })
 
 });

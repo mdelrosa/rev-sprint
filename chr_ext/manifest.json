@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
 
-  "name": "One-click Kittens",
-  "description": "This extension demonstrates a 'browser action' with kittens.",
+  "name": "Taskmaster",
+  "description": "Keep yourself on task.",
   "version": "1.0",
   "permissions": [
     "http://*/*",
@@ -13,7 +13,7 @@
     "storage",
     "background"],
   "background": {
-    "scripts": ["magnify.js"]
+    "scripts": ["background.js"]
   },
   "content_security_policy": "script-src 'self' https://connect.facebook.net; object-src 'self'",
   "browser_action": {

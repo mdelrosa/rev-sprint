@@ -2,4 +2,7 @@ extends layout
 
 block content
   div.center.well
-    h2 You are currently working on:
+    if (currentTask.length() ===0)
+      h2 You aren't working on anything at the moment!
+    else
+      h2 You are currently working on: #{currentTask.name}
