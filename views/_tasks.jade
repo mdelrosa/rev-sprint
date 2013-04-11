@@ -3,12 +3,14 @@ if (tasks == true || tasks.length != 0)
   table
     tr
       th Name
-      th Duration
+      th Duration (Minutes)
       th Score
     for task in tasks
-      tr
-        td #{task.name}
-        td #{task.duration}
-        td #{task.score[task.score.length-1]}
+      if (task.status == "complete")
+        tr
+          - var dur = (task.duration / 60000)
+          td #{task.name}
+          td #{dur}
+          td #{task.score[task.score.length-1]}
 else
   p Nothing here yet. What would you like to do?
