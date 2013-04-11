@@ -21,11 +21,10 @@ var taskSchema = mongoose.Schema({
   scoretime: Array,
   comment: String,
   status: String
-})
+});
 
 var User = mongoose.model('User', userSchema);
 var Task = mongoose.model ('Task', taskSchema);
 
 exports.User = User;
 exports.Task = Task;
-

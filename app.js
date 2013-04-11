@@ -47,6 +47,11 @@ function facebookGetUser() {
   }
 }
 
+
+//extension routes
+app.get('/current/ext', user.current_ext);
+
+//regular routes
 app.get('/', facebookGetUser(), user.main);
 // app.get('/current', facebookGetUser(), user.current);
 // app.get('/history', facebookGetUser(), user.history);

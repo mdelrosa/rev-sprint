@@ -60,7 +60,8 @@ exports.main = function(req, res){
 			else if (!foundUser || !foundUser.length) {
 				var new_user = new User({user_id: user.id,
 					                     username: user.first_name,
-					                     owned_tasks: []
+					                     owned_tasks: [],
+                               current_task: {}
 					                 });
 				new_user.save(function(err) {
 					if(err) {console.log(err)}
@@ -78,6 +79,18 @@ exports.main = function(req, res){
               tasks: [],
               start: 0,
               finish: 0
+						});
+            Task.find({creator: req.session.gerbil, status: "complete"},function(err,doc){
+              if(err){
+                console.log(err);
+              }
+              else{
+                res.render('index', {
+                  title: 'Taskmaster',
+                  name: req.session.user.username,
+                  tasks: doc
+                });
+              }
             });
 					}
 				});
@@ -87,30 +100,6 @@ exports.main = function(req, res){
   });
 }
 
-// exports.current = function(req, res){
-  // Task.findOne({creator: req.session.gerbil, status: "open"}), function(err,doc) {
-    // if(err)
-      // console.log(err)
-    // if(doc){
-      // console.log(creator);
-      // console.log(doc);
-      // res.render('current', {title: 'Current Tasks', opentask: doc})
-    // }
-  // };
-// }
-
-// exports.history = function(req, res){
-  // Task.find({creator: req.session.gerbil, status: "complete"},function(err,doc){
-    // if(err){
-      // console.log(err);
-    // }
-    // else{
-      // console.log(doc);
-      // res.render('history', {title: 'Task History', history: doc})
-    // }
-  // });
-// }
-
 exports.login = function(req, res){
   res.render('login', {title: 'Taskmaster'})
 }
@@ -118,6 +107,7 @@ exports.login = function(req, res){
 exports.newtask = function(req, res){
   console.log("task name: ", req.body.taskName);
   console.log("duration (ms): ", req.body.duration);
+  console.log("keywords", req.body.keywords);
   console.log("Facebook ID: ", req.session.gerbil);
   var dat = new Date();
   var now = dat.getTime();
@@ -132,6 +122,10 @@ exports.newtask = function(req, res){
     }
     res.send("YEAAAAA");
   });
+}
+
+exports.current_ext = function(req,res) {
+  res.send(true);
 }
 
 exports.checkTask = function(req,res) {
