@@ -1,0 +1,14 @@
+h3 Task History:
+if (tasks == true || tasks.length != 0)
+  table
+    tr
+      th Name
+      th Duration
+      th Score
+    for task in tasks
+      tr
+        td #{task.name}
+        td #{task.duration}
+        td #{task.score[task.score.length-1]}
+else
+  p Nothing here yet. What would you like to do?

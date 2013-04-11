@@ -1,8 +1,18 @@
-extends layout
-
-block content
-  div.center.well
-    form(mame='login', action='/login/action', method='post')
-      input(type='text', placeholder="Username", name='username')
-      input(type='text', placeholder="Password", name='password')
-      input.btn.btn-success Login
+doctype 5
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    script(src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js")
+    link(rel='stylesheet', href='http://bootswatch.com/simplex/bootstrap.css')
+  body
+    div(id='blurb')
+      h2
+        | What is Taskmaster?
+      p
+        | A cool description goes here
+    div(id='logindiv')
+      h2
+        | Get Started:
+      a(href='/login')
+        img(id='loginbutton', src='../images/facebook_login.png',)
