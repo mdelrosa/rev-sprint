@@ -6,7 +6,6 @@
   "version": "1.0",
   "permissions": [
     "http://*/*",
-    "https://secure.flickr.com/",
     "https://www.facebook.com/*",
     "tabs",
     "cookies",
@@ -22,13 +21,19 @@
   },
   "content_scripts": [
   {
-    "matches": ["http://*/*"],
+    "matches": ["http://*/*",
+    "https://*/*"],
     "js": ["jquery.min.js",
            "jquery-ui.min.js",
-           "popup.js"
+           "popup.js",
+           "injector.js"
           ],
     "css": ["jquery-ui.css"],
     "run_at": "document_idle"
   }
-  ]
+  ],
+  "web_accessible_resources":
+   ["monitoringTest.js",
+   "jquery.min.js",
+   "jquery-ui.min.js"]
 }
