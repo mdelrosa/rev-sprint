@@ -20,7 +20,8 @@ var taskSchema = mongoose.Schema({
   score: Array,
   scoretime: Array,
   comment: String,
-  status: String
+  status: String,
+  URLs: Array
 });
 
 var User = mongoose.model('User', userSchema);
