@@ -21,7 +21,8 @@ var taskSchema = mongoose.Schema({
   scoretime: Array,
   comment: String,
   status: String,
-  URLs: Array
+  URLs: Array,
+  sum: Number
 });
 
 var User = mongoose.model('User', userSchema);
