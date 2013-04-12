@@ -208,3 +208,12 @@ exports.checkoff = function(req,res) {
       });
   });
 }
+
+exports.getwords = function(req,res) {
+  Task.findOne({creator: req.body.fbID, status: "open"}, function(err,task) {
+    if(err)
+      console.log(err);
+    if(task)
+      res.send(task.keywords);
+  });
+}
