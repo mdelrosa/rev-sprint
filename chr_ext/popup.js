@@ -82,7 +82,8 @@ $(document).ready(function() {
         console.log('taburl', tab.url);
         chrome.cookies.get({'url': 'https://www.facebook.com/connect/login_success.html#_=_', 'name':'c_user'}, function(cookie) {
           chrome.cookies.set({'url': tab.url, 'name':'c_user', 'value': cookie.value}, function() {
-            console.log('cookie set', cookie.value);
+            console.log('c_user set @', tab.url);
+            console.log('c_user set as:', cookie.value);
           })
         })
       }
@@ -90,10 +91,6 @@ $(document).ready(function() {
     }
     
     chrome.tabs.onCreated.addListener(function(tab) {
-      postCookie(tab);
-    });
-
-    chrome.tabs.onUpdated.addListener(function(tab) {
       postCookie(tab);
     });
 
