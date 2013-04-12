@@ -142,7 +142,7 @@ exports.checkTask = function(req,res) {
       var newsum = 0;
       doc.score.push(newscore);
       for (var i = 0; i < doc.score.length; i++) {
-        newsum += parseInt(doc.score[i]);
+        newsum += parseFloat(doc.score[i]);
       }
       doc.sum = newsum;
       
