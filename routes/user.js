@@ -113,7 +113,7 @@ exports.newtask = function(req, res){
   var now = dat.getTime();
   var durMS = parseInt(req.body.duration) * 60000;
   var task = new Task({ creator: req.session.gerbil, name: req.body.taskName, date: now,
-    duration: durMS, score: [], scoretime: [], comment: "", keywords: req.body.keywords, status: "open", URLs: []});
+    duration: durMS, score: [], scoretime: [], comment: "", keywords: req.body.keywords, sum: 0, status: "open", URLs: []});
   task.score[0] = 0;
   task.scoretime[0] = 0;
   task.save(function (err, task) {
@@ -139,8 +139,13 @@ exports.checkTask = function(req,res) {
     }
     if(doc){
       var newscore = parseFloat(req.body.scoreIncr);
+      var newsum = 0;
       doc.score.push(newscore);
-
+      for (var i = 0; i < doc.score.length; i++) {
+        newsum += parseInt(doc.score[i]);
+      }
+      doc.sum = newsum;
+      
       var timeElapsed = req.body.time - doc.date;
       doc.scoretime.push(timeElapsed);
       if(timeElapsed >= doc.duration){
