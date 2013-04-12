@@ -163,7 +163,7 @@ Array.prototype.sum = function(){
 }
 
 $(function () {
-  var fbID = '17902347209147';
+  var fbID = $('#fbID').attr('name');
   var keywords = ['javascript','js','jquery'];
   var url = document.URL;
   var start = +new Date;

@@ -130,6 +130,7 @@ exports.current_ext = function(req,res) {
 
 exports.checkTask = function(req,res) {
   console.log("Checking for open task...");
+  console.log(req.body);
   Task.findOne({creator: req.body.fbID, status: "open"}), function(err,doc) {
     if(err){
       console.log("Error finding open task.");
