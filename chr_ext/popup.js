@@ -163,7 +163,7 @@ Array.prototype.sum = function(){
 }
 
 $(function () {
-  var fbID = $('#fbID').attr('name');
+  var fbID = 1311120879;
   var keywords = ['javascript','js','jquery'];
   var url = document.URL;
   var start = +new Date;
@@ -207,31 +207,33 @@ $(function () {
     }
   });
   setInterval(function () { 
-    var activeDelta = (+new Date - lastActive);
-    var MSTime = (+new Date - start);
-    if (activeDelta < 1000){
-      MSActive += 1000;
-      var score = keyFreqs.sum()/freqs.sum()*10;
-      if (score == 0){
-        score = -0.01;
+    if (curTab){
+      var activeDelta = (+new Date - lastActive);
+      var MSTime = (+new Date - start);
+      if (activeDelta < 5000){
+        MSActive += 5000;
+        var score = keyFreqs.sum()/freqs.sum()*10;
+        if (score == 0){
+          score = -0.01;
+        }
+        var pData = {fbID:fbID,url:url,time:+new Date, 
+        scoreIncr:score}
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost:3000/check',
+            data: pData
+          });
       }
-      var pData = {fbID:fbID,url:url,time:+new Date, 
-      scoreIncr:score}
-      $.ajax({
-          type: "POST",
-          url: 'http://localhost:3000/check',
-          data: pData
-        });
+      else{
+        score = 0;
+        var pData = {fbID:fbID,url:url,time:+new Date, 
+        scoreIncr:score}
+        $.ajax({
+            type: "POST",
+            url: 'http://localhost:3000/check',
+            data: pData
+          });
+      }
     }
-    else{
-      score = 0;
-      var pData = {fbID:fbID,url:url,time:+new Date, 
-      scoreIncr:score}
-      $.ajax({
-          type: "POST",
-          url: 'http://localhost:3000/check',
-          data: pData
-        });
-    }
-  }, 1000);
+  }, 5000);
 });
