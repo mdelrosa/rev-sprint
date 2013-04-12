@@ -181,76 +181,84 @@ Array.prototype.sum = function(){
 
 $(function () {
   var fbID = 1311120879;
-  var keywords = ['javascript','js','jquery'];
-  var url = document.URL;
-  var start = +new Date;
-  var MSActive = 0;
-  var lastActive = +new Date;
-  var curTab = true;
-  var theText;
-  $('p,h1,h2,h3,h4,h5').each(function(){
-    theText += $(this).text().toLowerCase();
-  });
-  var cleanedText = theText.replace(/[()!";:,.\/?\\↵-]/g, ' ');
-  cleanedText = cleanedText.replace(/'/g, '');
-  var strArr = cleanedText.split(" ");
-  cleanedArr = strArr.filter(function(e){return e});
-  fData = freqs(cleanedArr);
-  words = fData[0];
-  freqs = fData[1];
-  console.log(keywords);
-  keyFreqs = getKeyFreqs(fData,keywords)
-  console.log(keyFreqs);
-  var score = keyFreqs.sum()/freqs.sum()*10;
-  if (score == 0){
-    score = -0.01;
-  }
-  window.onfocus = function () { 
-    curTab = true; 
-  }; 
-  window.onblur = function () { 
-    curTab = false; 
-  }; 
-  $(document).mousemove(function(e){
-    if (curTab){
-      lastActive = (+new Date);
-      // console.log('mouse movement',lastActive);
-    }
-  });
-  $(document).keypress(function(e){
-    if (curTab){
-      lastActive = (+new Date);
-      // console.log('key press',lastActive);
-    }
-  });
-  setInterval(function () { 
-    if (curTab){
-      var activeDelta = (+new Date - lastActive);
-      var MSTime = (+new Date - start);
-      if (activeDelta < 5000){
-        MSActive += 5000;
-        var score = keyFreqs.sum()/freqs.sum()*10;
-        if (score == 0){
-          score = -0.01;
+  $.ajax({
+    type: "POST",
+    url: 'http://localhost:3000/keywords',
+    data: {fbID:fbID},
+    success: function(data){
+      var keywords = data;
+      // var keywords = ['javascript','js','jquery'];
+      var url = document.URL;
+      var start = +new Date;
+      var MSActive = 0;
+      var lastActive = +new Date;
+      var curTab = true;
+      var theText;
+      $('p,h1,h2,h3,h4,h5').each(function(){
+        theText += $(this).text().toLowerCase();
+      });
+      var cleanedText = theText.replace(/[()!";:,.\/?\\↵-]/g, ' ');
+      cleanedText = cleanedText.replace(/'/g, '');
+      var strArr = cleanedText.split(" ");
+      cleanedArr = strArr.filter(function(e){return e});
+      fData = freqs(cleanedArr);
+      words = fData[0];
+      freqs = fData[1];
+      console.log(keywords);
+      keyFreqs = getKeyFreqs(fData,keywords)
+      console.log(keyFreqs);
+      var score = keyFreqs.sum()/freqs.sum()*10;
+      if (score == 0){
+        score = -0.01;
+      }
+      window.onfocus = function () { 
+        curTab = true; 
+      }; 
+      window.onblur = function () { 
+        curTab = false; 
+      }; 
+      $(document).mousemove(function(e){
+        if (curTab){
+          lastActive = (+new Date);
+          // console.log('mouse movement',lastActive);
         }
-        var pData = {fbID:fbID,url:url,time:+new Date, 
-        scoreIncr:score}
-        $.ajax({
-            type: "POST",
-            url: 'http://localhost:3000/check',
-            data: pData
-          });
-      }
-      else{
-        score = 0;
-        var pData = {fbID:fbID,url:url,time:+new Date, 
-        scoreIncr:score}
-        $.ajax({
-            type: "POST",
-            url: 'http://localhost:3000/check',
-            data: pData
-          });
-      }
+      });
+      $(document).keypress(function(e){
+        if (curTab){
+          lastActive = (+new Date);
+          // console.log('key press',lastActive);
+        }
+      });
+      setInterval(function () { 
+        if (curTab){
+          var activeDelta = (+new Date - lastActive);
+          var MSTime = (+new Date - start);
+          if (activeDelta < 5000){
+            MSActive += 5000;
+            var score = keyFreqs.sum()/freqs.sum()*10;
+            if (score == 0){
+              score = -0.01;
+            }
+            var pData = {fbID:fbID,url:url,time:+new Date, 
+            scoreIncr:score}
+            $.ajax({
+                type: "POST",
+                url: 'http://localhost:3000/check',
+                data: pData
+              });
+          }
+          else{
+            score = 0;
+            var pData = {fbID:fbID,url:url,time:+new Date, 
+            scoreIncr:score}
+            $.ajax({
+                type: "POST",
+                url: 'http://localhost:3000/check',
+                data: pData
+              });
+          }
+        }
+      }, 5000);
     }
-  }, 5000);
+  });
 });
