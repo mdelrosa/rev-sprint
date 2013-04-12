@@ -113,7 +113,7 @@ exports.newtask = function(req, res){
   var now = dat.getTime();
   var durMS = parseInt(req.body.duration) * 60000;
   var task = new Task({ creator: req.session.gerbil, name: req.body.taskName, date: now,
-    duration: durMS, score: [], scoretime: [], comment: "", keywords: [], status: "open"});
+    duration: durMS, score: [], scoretime: [], comment: "", keywords: [], status: "open", URLs: []});
   task.score[0] = 0;
   task.scoretime[0] = 0;
   task.save(function (err, task) {
@@ -131,7 +131,7 @@ exports.current_ext = function(req,res) {
 exports.checkTask = function(req,res) {
   console.log("Checking for open task...");
   console.log(req.body);
-  Task.findOne({creator: req.body.creator, status: "open"}), function(err,doc) {
+  Task.findOne({creator: req.body.fbID, status: "open"}), function(err,doc) {
     if(err){
       console.log("Error finding open task.");
     }
@@ -146,6 +146,8 @@ exports.checkTask = function(req,res) {
         doc.status = "complete";
         console.log("Task complete.");
       }
+      
+      doc.URLs.push(req.body.url);
       
       doc.save(function (err) {
         if(err){

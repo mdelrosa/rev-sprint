@@ -3,7 +3,7 @@
  */
 
 var mongoose = require('mongoose');
-mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/recall');
+mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/taskmaster');
 
 var userSchema = mongoose.Schema({
     username: String,
@@ -20,7 +20,8 @@ var taskSchema = mongoose.Schema({
   score: Array,
   scoretime: Array,
   comment: String,
-  status: String
+  status: String,
+  URLs: Array
 });
 
 var User = mongoose.model('User', userSchema);
