@@ -199,10 +199,10 @@ exports.checkoff = function(req,res) {
       task.URLs = req.body.newURLs;
       task.save(function (err) {
         if(err){
-          console.log("Error updating task status.");
+          console.log("Error updating URL list.");
         }
         else{
-          console.log("Successfully updated URLs.");
+          res.send("Successfully updated URLs.");
         }
       });
   });
