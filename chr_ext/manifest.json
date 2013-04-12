@@ -6,7 +6,7 @@
   "version": "1.0",
   "permissions": [
     "http://*/*",
-    "https://www.facebook.com/*",
+    "https://*/*",
     "tabs",
     "cookies",
     "storage",

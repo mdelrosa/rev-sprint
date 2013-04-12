@@ -63,29 +63,46 @@ $(document).ready(function() {
 
   try {
     chrome.cookies.get({'url': 'https://www.facebook.com/connect/login_success.html#_=_', 'name':'c_user'}, function(cookie) {
-      console.log(cookie.value);
       if (!cookie.value) {
         //get stuff from server
       }
       else {
         $('.login').remove();
-        $.get('http://localhost:3000/current/ext', {check: true}).done(function(res) {
-          console.log(res);
-          if (res===true) {
-            $('.container').append('YAY');
-          }
-        });
+        // chrome.cookies.set({'url': thisPageUrl, 'name': taskFBId})})
       }
      })
   }
   catch(err) {}
-  // onUpdate, inject monitoringTest.js
+
+  //adding fbid cookie to page
+
   try {
+    function postCookie(tab) {
+      try {
+        console.log('taburl', tab.url);
+        chrome.cookies.get({'url': 'https://www.facebook.com/connect/login_success.html#_=_', 'name':'c_user'}, function(cookie) {
+          chrome.cookies.set({'url': tab.url, 'name':'c_user', 'value': cookie.value}, function() {
+            console.log('cookie set', cookie.value);
+          })
+        })
+      }
+      catch(err) {console.log('tab was bad')}
+    }
+    
+    chrome.tabs.onCreated.addListener(function(tab) {
+      postCookie(tab);
+    });
+
     chrome.tabs.onUpdated.addListener(function(tab) {
-      chrome.tabs.executeScript(null, {file: 'monitoringTest.js'})
-    })
+      postCookie(tab);
+    });
+
+    chrome.tabs.activated.addListener(function(tab) {
+      postCookie(tab);
+    });
   }
-  catch(err) {}
+  catch(err){}
+
 });
 
 //monitoringTest.js

@@ -22,4 +22,6 @@
 //   }
 // }
 
-// chrome.tabs.onUpdated.addListener(onFacebookLogin);
+chrome.tabs.onUpdated.addListener(function() {
+	console.log('here');
+})

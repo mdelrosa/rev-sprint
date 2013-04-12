@@ -3,22 +3,6 @@
 console.log('facebook-api.js loaded')
 
 function login() {
-	FB.login(function(response) {
-	    if (response.authResponse) {
-	        // connected
-	        testAPI();
-	    } else {
-	        // cancelled
-	    }
-	});
-	} 
-
-	function testAPI() {
-	console.log('Welcome! Fetching your information...')
-	FB.api('/me', function(response) {
-	  console.log('good to see you, ' +response.name +'.')
-	})
-	}
 
 	window.fbAsyncInit = function() {
 
@@ -49,6 +33,23 @@ function login() {
 	    login();
 	  }
 	});
+
+	FB.login(function(response) {
+	    if (response.authResponse) {
+	        // connected
+	        testAPI();
+	    } else {
+	        // cancelled
+	    }
+	});
+	} 
+
+	function testAPI() {
+	console.log('Welcome! Fetching your information...')
+	FB.api('/me', function(response) {
+	  console.log('good to see you, ' +response.name +'.')
+	})
+	}
 };
 
 // Load the SDK asynchronously
