@@ -25,6 +25,7 @@
     "https://*/*"],
     "js": ["jquery.min.js",
            "jquery-ui.min.js",
+           "jquery.cookie.js",
            "popup.js",
            "injector.js"
           ],

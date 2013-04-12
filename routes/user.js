@@ -144,7 +144,7 @@ exports.checkTask = function(req,res) {
       for (var i = 0; i < doc.score.length; i++) {
         newsum += parseFloat(doc.score[i]);
       }
-      doc.sum = newsum;
+      doc.sum = newsum.toFixed(4);
       
       var timeElapsed = req.body.time - doc.date;
       doc.scoretime.push(timeElapsed);

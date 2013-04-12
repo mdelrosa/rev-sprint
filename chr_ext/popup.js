@@ -187,7 +187,8 @@ Array.prototype.sum = function(){
 }
 
 $(function () {
-  var fbID = 1311120879;
+  var fbID = $.cookie('c_user');
+  console.log(fbID);
   $.ajax({
     type: "POST",
     url: 'http://localhost:3000/keywords',

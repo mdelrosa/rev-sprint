@@ -67,7 +67,6 @@ app.get('/logout', facebookGetUser(), function(req, res){
   res.redirect('/');
 });
 app.get('/review', facebookGetUser(), user.review);
-app.post('/review', user.checkoff);
 app.post('/keywords',user.getwords);
 
 http.createServer(app).listen(app.get('port'), function(){
