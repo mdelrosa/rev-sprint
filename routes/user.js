@@ -130,7 +130,7 @@ exports.current_ext = function(req,res) {
 
 exports.checkTask = function(req,res) {
   console.log("Checking for open task...");
-  Task.findOne({creator: req.body.creator, status: "open"}), function(err,doc) {
+  Task.findOne({creator: req.body.fbID, status: "open"}), function(err,doc) {
     if(err){
       console.log("Error finding open task.");
     }
@@ -145,6 +145,8 @@ exports.checkTask = function(req,res) {
         doc.status = "complete";
         console.log("Task complete.");
       }
+      
+      doc.URLs.push(req.body.url);
       
       doc.save(function (err) {
         if(err){
