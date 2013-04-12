@@ -182,3 +182,29 @@ exports.abandon = function(req,res) {
       res.send("Task abandoned.");
   });
 }
+
+exports.review = function(req,res) {
+  Task.findOne({creator: req.session.gerbil, URLs: req.body.URLs}).exec(function (err, task) {
+    if (err)
+      console.log(err)
+    else
+      res.render('review', {urls: task.URLs});
+  });
+}
+
+exports.checkoff = function(req,res) {
+  Task.findOne({creator: req.session.gerbil, URLs: req.body.oldURLs}).exec(function (err, task) {
+    if (err)
+      console.log(err)
+    else
+      task.URLs = req.body.newURLs;
+      task.save(function (err) {
+        if(err){
+          console.log("Error updating URL list.");
+        }
+        else{
+          res.send("Successfully updated URLs.");
+        }
+      });
+  });
+}
