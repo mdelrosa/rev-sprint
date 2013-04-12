@@ -6,8 +6,9 @@ block scripts
         console.log("Has been clicked");
         var taskName = $('#taskname').val();
         var duration = $('#duration').val();
+        var keywords = ($('#keywords').val()).replace(/ /g,'').split(",");
         console.log("Got information.");
-        $.post('./newtask', { taskName : taskName, duration : duration}, function(){
+        $.post('./newtask', { taskName : taskName, duration : duration, keywords: keywords}, function(){
           console.log("Is this working yet?");
           location.reload(forceGet=true);
         });
