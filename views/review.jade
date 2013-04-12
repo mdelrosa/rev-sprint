@@ -1,0 +1,27 @@
+extends layout
+block scripts
+  $(document).ready(function() {
+    var selectedURLs = new Array();
+    $('#Submit').click(function (){
+      console.log("Has been clicked");
+      $("input:checkbox:checked").each(function () {
+        selectedURLs.push($(this).attr('name'));
+      console.log("Got selected URLs.");
+      });
+      $.post('./review', {oldURLs : urls, newURLs : selectedURLs}, 
+    function(data){
+      console.log("Is this working yet?");
+      document.location.href='/';});
+    });
+  });
+
+block content
+  h3 Good job! Check off the sites you found most helpful.
+  for url in urls
+    p
+      input(type='checkbox', name=url.name)
+        | url.name
+        br
+        | url.score
+  p
+    input(type='button', value='Submit', id='Submit')

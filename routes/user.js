@@ -130,21 +130,25 @@ exports.current_ext = function(req,res) {
 
 exports.checkTask = function(req,res) {
   console.log("Checking for open task...");
-  Task.findOne({creator: req.body.creator, status: "open"}), function(err,doc) {
+  console.log(req.body);
+  Task.findOne({creator: parseInt(req.body.fbID), status: "open"}, function(err,doc) {
+    console.log(err);
+    console.log(doc);
     if(err){
       console.log("Error finding open task.");
     }
     if(doc){
-      var newscore = doc.score + req.body.scorechange;
-      var scorelength = doc.score.length;
-      doc.score.set(scorelength+1,newscore);
+      var newscore = parseFloat(req.body.scoreIncr);
+      doc.score.push(newscore);
 
       var timeElapsed = req.body.time - doc.date;
-      doc.scoretime.set(scorelength+1,timeElapsed);
+      doc.scoretime.push(timeElapsed);
       if(timeElapsed >= doc.duration){
         doc.status = "complete";
         console.log("Task complete.");
       }
+      
+      doc.URLs.push(req.body.url);
       
       doc.save(function (err) {
         if(err){
@@ -156,13 +160,13 @@ exports.checkTask = function(req,res) {
       });
       
       if(timeElapsed < doc.duration){
-        res.send(timeLeft);
+        res.send(doc.duration - timeElapsed);
       }
       if(timeElapsed >= doc.duration){
         res.send("Task complete.");
       }
     }
-  }
+  })
 }
 
 exports.abandon = function(req,res) {
@@ -176,5 +180,31 @@ exports.abandon = function(req,res) {
           console.log(err);
       });
       res.send("Task abandoned.");
+  });
+}
+
+exports.review = function(req,res) {
+  Task.findOne({creator: req.session.gerbil, URLs: req.body.URLs}).exec(function (err, task) {
+    if (err)
+      console.log(err)
+    else
+      res.render('review', {urls: task.URLs});
+  });
+}
+
+exports.checkoff = function(req,res) {
+  Task.findOne({creator: req.session.gerbil, URLs: req.body.oldURLs}).exec(function (err, task) {
+    if (err)
+      console.log(err)
+    else
+      task.URLs = req.body.newURLs;
+      task.save(function (err) {
+        if(err){
+          console.log("Error updating URL list.");
+        }
+        else{
+          res.send("Successfully updated URLs.");
+        }
+      });
   });
 }
