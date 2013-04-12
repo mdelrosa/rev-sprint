@@ -20,16 +20,38 @@ exports.main = function(req, res){
 			else if (foundUser) {
         console.log('found user', foundUser)
 				req.session.user = foundUser;
-				console.log('session', req.session.user)
-        Task.find({creator: req.session.gerbil, status: "complete"},function(err,doc){
+        Task.find({creator: req.session.gerbil},function(err,doc){
           if(err){
             console.log(err);
           }
           else{
+            var openTasks = 0;
+            var currentTask;
+            var start;
+            var finish;
+            var startReadable;
+            var finishReadable;
+            doc.forEach(function(task){
+              console.log(task);
+              if(task.status == "open") {
+                openTasks = 1;
+                currentTask = task;
+                start = new Date(task.date);
+                finish = new Date(task.date + task.duration);
+                startReadable = start.toLocaleTimeString();
+                finishReadable = finish.toLocaleTimeString();
+              }
+            });
+            console.log(openTasks);
+            console.log(currentTask);
             res.render('index', {
               title: 'Taskmaster',
               name: req.session.user.username,
-              tasks: doc
+              tasks: doc,
+              currentTask: currentTask,
+              openTasks: openTasks,
+              start: startReadable,
+              finish: finishReadable
             });
           }
         });
@@ -48,15 +70,16 @@ exports.main = function(req, res){
 						console.log("New User: ", req.session.user.username);
 						console.log("User saved");
             console.log(req.user);
-<<<<<<< HEAD
-						res.render('index', {
-							title: 'Taskmaster',
-							name: req.session.user.username,
-              ID: req.user,
-							tasks: req.session.user.owned_tasks,
-              currentTask: req.session.user.current_task
+            var hamster
+            res.render('index', {
+              title: 'Taskmaster',
+              name: req.session.user.username,
+              currentTask: hamster,
+              openTasks: 0,
+              tasks: [],
+              start: 0,
+              finish: 0
 						});
-=======
             Task.find({creator: req.session.gerbil, status: "complete"},function(err,doc){
               if(err){
                 console.log(err);
@@ -69,48 +92,12 @@ exports.main = function(req, res){
                 });
               }
             });
->>>>>>> 81de8590d8aca3f45d5d569332f48f114baa694c
 					}
 				});
 			}
 		});
 	}
   });
-}
-
-exports.current = function(req, res){
-<<<<<<< HEAD
-  console.log('here', req.session.user.current_task)
-  res.render('current', {
-    title: 'Current Tasks',
-    currentTask: req.session.user.current_task
-  });
-=======
-  Task.findOne({creator: req.session.gerbil, status: "open"}), function(err,doc) {
-    if(err)
-      console.log(err)
-    if(doc){
-      console.log(creator);
-      console.log(doc);
-      res.render('current', {title: 'Current Tasks', opentask: doc})
-    }
-  };
->>>>>>> 81de8590d8aca3f45d5d569332f48f114baa694c
-}
-
-exports.history = function(req, res){
-  Task.find({creator: req.session.gerbil, status: "complete"},function(err,doc){
-    if(err){
-      console.log(err);
-    }
-    else{
-      var dat = new Date(doc.date);
-      var readable = dat.toDateString();
-      console.log(dat);
-      res.render('history', {title: 'Task History', history: doc, start: readable})
-    }
-  });
-  
 }
 
 exports.login = function(req, res){
@@ -126,13 +113,14 @@ exports.newtask = function(req, res){
   var now = dat.getTime();
   var durMS = parseInt(req.body.duration) * 60000;
   var task = new Task({ creator: req.session.gerbil, name: req.body.taskName, date: now,
-    duration: durMS, score: [], scoretime: [], comment: "", keywords: [], status: "open"});
+    duration: durMS, score: [], scoretime: [], comment: "", keywords: [], status: "open", URLs: []});
   task.score[0] = 0;
   task.scoretime[0] = 0;
   task.save(function (err, task) {
     if(err) {
       console.log("Error saving new task");
     }
+    res.send("YEAAAAA");
   });
 }
 
@@ -178,10 +166,15 @@ exports.checkTask = function(req,res) {
 }
 
 exports.abandon = function(req,res) {
-  Task.remove({creator: req.body.id, status: "open"}).exec(function (err, task) {
+  Task.findOne({creator: req.session.gerbil, status: "open"}).exec(function (err, task) {
     if (err)
       console.log(err)
     else
+      task.status = "complete";
+      task.save(function(err){
+        if(err)
+          console.log(err);
+      });
       res.send("Task abandoned.");
   });
 }

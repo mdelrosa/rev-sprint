@@ -7,11 +7,16 @@ block scripts
         var taskName = $('#taskname').val();
         var duration = $('#duration').val();
         console.log("Got information.");
-        $('#duration').val("");
-        $('#taskname').val("");
-        $('#keywords').val("");
-        $.post('./newtask', { taskName : taskName, duration : duration}, function(data){
+        $.post('./newtask', { taskName : taskName, duration : duration}, function(){
           console.log("Is this working yet?");
+          location.reload(forceGet=true);
+        });
+      });
+      $('#abandon').click(function (){
+        console.log("Abandon has been clicked");
+        $.post('./abandon', {}, function(){
+          console.log("Is this working yet?");
+          location.reload(forceGet=true);
         });
       });
     });
@@ -19,16 +24,27 @@ block scripts
 block content
   div.center.well
     h3 Hi, #{name}.
-    h4 What do you want to get done?
-    p
-    form(id='newtaskform')
+    if (openTasks == 0)
+      h4 What do you want to get done?
       p
-        input(placeholder="Task name?", id='taskname')
-      p
-        input(placeholder="Duration? (In minutes)", id='duration')
-      p
-        input(placeholder="Keywords? (Separate with ,)", id='keywords')
-      p
-        input(type='button', value='Go!', id='Submit')
+      form(id='newtaskform')
+        p
+          input(placeholder="Task name?", id='taskname')
+        p
+          input(placeholder="Duration? (In minutes)", id='duration')
+        p
+          input(placeholder="Keywords? (Separate with ,)", id='keywords')
+        p
+          input(type='button', value='Go!', id='Submit')
+    if (openTasks == 1)
+      h4 You are working on: #{currentTask.name}
+      p 
+        | Your current score is: #{currentTask.score[(currentTask.score.length)-1]}.
+        br
+        | You started at: #{start} and will be done at: #{finish}.
+        br
+        | Would you like to stop early?
+      button(type='submit', id='abandon')
+        | Abort Abort!
   div.taskholder.center.well
     include _tasks.jade
