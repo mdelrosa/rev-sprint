@@ -3,7 +3,7 @@
  */
 
 var mongoose = require('mongoose');
-mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/recall');
+mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/taskmaster');
 
 var userSchema = mongoose.Schema({
     username: String,
